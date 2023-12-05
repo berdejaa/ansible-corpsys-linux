@@ -1,0 +1,5 @@
+- name: ansible-corpsys_pam
+  hosts: all
+  roles:
+     - { role: ansible-corpsys_pam }
+  become: true 

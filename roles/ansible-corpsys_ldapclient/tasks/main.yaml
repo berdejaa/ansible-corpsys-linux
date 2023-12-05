@@ -1,0 +1,59 @@
+---
+- name: Install packages.
+  yum:
+    name: "{{ packages }}"  
+    state: "{{ package_state }}"
+  vars:
+    packages:
+      - openldap
+      - nss-pam-ldapd
+  
+- name: Symlink /etc/openldap/certs -> /etc/openldap/cacerts
+  file:
+    src: /etc/openldap/certs
+    dest: /etc/openldap/cacerts
+    owner: root
+    group: root
+    state: link
+    force: yes
+
+- name: /etc/nslcd.conf
+  template:
+    src: nslcd.conf.j2
+    dest: /etc/nslcd.conf
+    owner: root
+    group: root
+    mode: 0644
+    #notify: restart nslcd
+
+- name: Enable and start nslcd service.
+  service:
+    name: nslcd
+    enabled: yes
+    state: started
+
+- name: /etc/openldap/ldap.conf
+  template:
+    src: ldap.conf.j2
+    dest: /etc/openldap/ldap.conf
+    owner: root
+    group: root
+    mode: 0444
+
+- name: Symlink /etc/ldap.conf -> /etc/openldap/ldap.conf
+  file:
+    src: /etc/openldap/ldap.conf
+    dest: /etc/ldap.conf
+    owner: root
+    group: root
+    state: link
+    force: yes
+    
+- name: /etc/nsswitch.conf
+  copy:
+    src: nsswitch.conf
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: 0644
+    # After nslcd service is present. 

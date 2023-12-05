@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: ansible-corpsys_pam
+  - role: ansible-corpsys_sudo
+  - role: ansible-corpsys_ldapclient

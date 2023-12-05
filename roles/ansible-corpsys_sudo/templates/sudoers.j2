@@ -1,0 +1,60 @@
+## Sudoers allows particular users to run various commands as
+## the root user, without needing the root password.
+##
+## Examples are provided at the bottom of the file for collections
+## of related commands, which can then be delegated out to particular
+## users or groups.
+##
+## This file must be edited with the 'visudo' command.
+
+## Host Aliases
+
+## User Aliases
+
+## Command Aliases
+#Cmnd_Alias BACKUP_TASKS = /bin/tar, /bin/cp, /bin/rm, /bin/ls, /usr/bin/find
+#Cmnd_Alias SYSTEM_TASKS = /bin/ls, /usr/bin/less, /usr/bin/tail, /bin/cat, /bin/grep, /bin/zcat, /usr/bin/bzcat, /usr/bin/bzgrep, /usr/bin/zgrep
+#Cmnd_Alias THREAD_DUMP = /etc/init.d/atg-*-jboss stacktrace, /usr/java/default/bin/jstack
+
+# Defaults specification
+
+#
+# Disable "ssh hostname sudo <cmd>", because it will show the password in clear.
+#         You have to run "ssh -t hostname sudo <cmd>".
+#
+Defaults    !requiretty
+
+#
+# Refuse to run if unable to disable echo on the tty. This setting should also be
+# changed in order to be able to use sudo without a tty. See requiretty above.
+#
+Defaults   !visiblepw
+
+#
+# Preserving HOME has security implications since many programs
+# use it when searching for configuration files. Note that HOME
+# is already set when the the env_reset option is enabled, so
+# this option is only effective for configurations where either
+# env_reset is disabled or HOME is present in the env_keep list.
+#
+Defaults    always_set_home
+
+Defaults    env_reset
+Defaults    env_keep =  "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR LS_COLORS"
+Defaults    env_keep += "MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"
+Defaults    env_keep += "LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES"
+Defaults    env_keep += "LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"
+Defaults    env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"
+Defaults    env_keep += "HOME"
+
+Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+
+## Allow root to run any commands anywhere
+root  ALL=(ALL)   ALL
+
+## For backwards compatibility
+## default centos/ec2-user user is part of the wheel group
+%wheel ALL=(ALL) NOPASSWD: ALL
+
+## Read drop-in files from /etc/sudoers.d (the # here does not mean a comment)
+#includedir /etc/sudoers.d

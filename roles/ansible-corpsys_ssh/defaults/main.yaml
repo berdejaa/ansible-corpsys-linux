@@ -1,0 +1,37 @@
+ssh_syslog_facility: 'AUTH'
+ssh_loglevel: 'INFO'
+ssh_permit_root_login: 'no'
+ssh_pubkey_authentication: 'yes'
+ssh_authkey_file: '/etc/ssh/users/%u.pub'
+ssh_allow_agent_forwarding: 'yes'
+ssh_allow_tcp_forwarding: 'no'
+ssh_x11_forwarding: 'no'
+ssh_use_dns: 'no'
+ssh_config_match:
+  - criteria: 'User'
+    patterns: 'infra'
+    conditions:
+      - 'PasswordAuthentication yes'
+#ssh_config_match:
+#  - criteria: 'User'
+#    patterns: 'admin'
+#    conditions:
+#      - 'PasswordAuthentication yes'
+
+# Match    Introduces a conditional block.  If all of the criteria on the Match line are
+#          The available criteria are User, Group, Host, and Address.
+#          The match patterns may consist of single entries or comma-separated lists and
+#          may use the wildcard and negation operators described in the PATTERNS section
+#          of ssh_config(5).
+
+#          The patterns in an Address criteria may additionally contain addresses to match
+#          in CIDR address/masklen format, e.g. “192.0.2.0/24” or “3ffe:ffff::/32”.
+
+#          Only a subset of keywords may be used on the lines following a Match keyword.
+#          Available keywords are AllowAgentForwarding, AllowTcpForwarding, AuthorizedKeysFile,
+#          AuthorizedPrincipalsFile, Banner, ChrootDirectory, ForceCommand, GatewayPorts,
+#          GSSAPIAuthentication, HostbasedAuthentication, HostbasedUsesNameFromPacketOnly,
+#          KbdInteractiveAuthentication, KerberosAuthentication, MaxAuthTries, MaxSessions,
+#          PasswordAuthentication, PermitEmptyPasswords, PermitOpen, PermitRootLogin,
+#          PermitTunnel, PubkeyAuthentication, RhostsRSAAuthentication, RSAAuthentication,
+#          X11DisplayOffset, X11Forwarding and X11UseLocalHost.

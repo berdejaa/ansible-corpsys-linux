@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Daniel Campos
+  description: Ansible role to configure different system settings (http://github.body.prod/ansible/system-settings)
+  company: "Bodybuilding.com"
+  license: MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: Amazon
+      versions:
+      - 2017.03
+      - 2017.09
+  categories:
+    - development
+    - system
+  dependencies: []

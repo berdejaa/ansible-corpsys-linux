@@ -1,0 +1,30 @@
+---
+- name: root group
+  group:
+    state: present
+    name: root
+    gid: 0
+
+- name: root user
+  user:
+    name: root
+    uid: 0
+    group: root
+    create_home: no
+    password: '$6$ed8ySKlrCxDZzRit$qmSW4BtE/PxOe8iH/EBbHGVxB/a3pBIOsXmHSIct/HHvlsXmKLVtcnaIefprh0otO3ee6B8Jti1tMHGkp3pGh0'
+
+- name: copy root ssh key
+  copy:
+    src: files/root/root.pub
+    dest: /etc/ssh/users/root.pub
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy root bashrc
+  copy:
+    src: files/root/bashrc
+    dest: /root/.bashrc
+    owner: root
+    group: root
+    mode: 0644

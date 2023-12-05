@@ -1,0 +1,4 @@
+---
+package_state: present
+ldap_host: 'lovage.body.prod'
+ldap_base: 'dc=body,dc=local'

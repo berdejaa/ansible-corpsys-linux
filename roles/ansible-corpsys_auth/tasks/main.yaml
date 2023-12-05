@@ -1,0 +1,28 @@
+---
+- name: Make sure /etc/ssh/users directory exists.
+  file:
+    path: "/etc/ssh/users"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- name: Copy keypull.sh script.
+  template:
+    src: keypull.sh.j2
+    dest: /usr/local/bin/keypull.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install keypull.sh cron.
+  cron:
+    name: keypull
+    minute: '*/10'
+    hour: '*'
+    job: '/usr/local/bin/keypull.sh >/dev/null 2>>/var/log/keyfetch-err.log'
+
+- name: Run keypull.sh for the first time.
+  command: /usr/local/bin/keypull.sh
+  args:
+    creates: /etc/ssh/users/rev

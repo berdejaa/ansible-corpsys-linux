@@ -1,0 +1,13 @@
+---
+- name: Create zincster group
+  group:
+    state: present
+    name: zinc
+    gid: 1002
+
+- name: Create zincster user
+  user:
+    name: zinc
+    uid: 1002
+    group: zinc
+    password: '$1$BQG9vFda$7OUvkfiYuokgy9bA5mTx40'

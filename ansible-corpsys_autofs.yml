@@ -1,0 +1,5 @@
+- name: ansible-corpsys_autofs
+  become: true
+  hosts: all
+  roles:
+     - { role: ansible-corpsys_autofs }

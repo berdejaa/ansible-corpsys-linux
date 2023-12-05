@@ -1,0 +1,5 @@
+- name: ansible-corpsys_users
+  become: true
+  hosts: all
+  roles:
+     - { role: ansible-corpsys_users }

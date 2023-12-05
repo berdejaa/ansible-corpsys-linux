@@ -1,0 +1,60 @@
+---
+- name: create /etc/ssh/users
+  file:
+    path: /etc/ssh/users
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+#- name: Install the libselinux-python package
+#  package:
+#    name: libselinux-python
+#    state: present
+
+#- name: Set SELinux to permissive
+#  ansible.posix.selinux:
+#    policy: targeted
+#    state: permissive
+
+- name: Ensure boot kernel
+  file:
+    src: "/boot/vmlinuz-{{ ansible_kernel }}"
+    dest: /vmlinuz
+    owner: root
+    group: root
+    state: link
+
+- name: Copy bash profile
+  copy:
+    src: profile
+    dest: /etc/profile
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy bashrc
+  copy:
+    src: bashrc
+    dest: /etc/bashrc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy profile.d
+  copy:
+    src: profile.d
+    dest: /etc/profile.d
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy skel files
+  copy:
+    src: skel
+    dest: /etc/skel
+    owner: root
+    group: root
+    mode: 0644
+
+- import_tasks: system_users.yaml

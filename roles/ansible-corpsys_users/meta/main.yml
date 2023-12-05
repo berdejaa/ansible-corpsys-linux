@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Alberto Sierra <alberto.sierra@bodybuilding.com>
+  description: Role to create default system users
+  company: BodyBuilding.com
+  min_ansible_version: 2.4
+  galaxy_tags: []
+dependencies: []

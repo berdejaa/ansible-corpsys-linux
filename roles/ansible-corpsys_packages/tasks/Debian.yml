@@ -1,0 +1,39 @@
+---
+# Install base packages
+
+- name: Only run "update_cache=yes" if the last one is more than 7200 seconds ago
+  apt:
+    update_cache: yes
+    cache_valid_time: 7200
+  tags:
+    - packages
+    - debian
+
+- name: Install base packages (Debian Based)
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - bzip2
+    - cron
+    - curl
+    - git
+    - htop
+    - jq
+    - less
+    - lsof
+    - mailutils
+    - netcat
+    - ngrep
+    - rsync
+    - screen
+    - sysstat
+    - tcpdump
+    - tree
+    - vim
+    - vim-common
+    - wget
+    - zsh
+  tags:
+    - packages
+    - debian

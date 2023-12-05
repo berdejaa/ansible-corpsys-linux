@@ -1,0 +1,11 @@
+---
+- name: Enforce root user configuration
+  import_tasks: user_root.yaml
+
+- name: Create infrastructure user
+  import_tasks: user_infra.yaml
+  when: ansible_domain == "body.local"
+
+- name: Create Zincster user
+  import_tasks: user_zinc.yaml
+  when: ansible_domain == "body.stage" or ansible_domain == "body.prod"

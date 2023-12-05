@@ -1,0 +1,5 @@
+- name: ansible-corpsys_ssh
+  become: true
+  hosts: all
+  roles:
+     - { role: ansible-corpsys_ssh }

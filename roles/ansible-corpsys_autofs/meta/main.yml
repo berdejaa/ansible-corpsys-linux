@@ -1,0 +1,14 @@
+galaxy_info:
+  role_name: bbcom_autofs
+  author: Alberto Sierra
+  description: Installs and configures autofs. Based on cmprescott/ansible-role-autofs with bugfixes
+  license: BSD
+  min_ansible_version: 1.9
+  platforms:
+  - name: GenericLinux
+    versions:
+    - any
+  categories:
+  - system
+
+dependencies: []

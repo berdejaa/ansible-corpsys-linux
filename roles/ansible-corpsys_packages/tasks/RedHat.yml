@@ -1,0 +1,47 @@
+---
+# Remove unwanted packages
+- name: Remove unwanted packages (RedHat Based)
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - ntp
+    - ntpdate
+  tags:
+    - packages
+    - redhat
+
+# Install base packages
+- name: Install base packages (RedHat Based)
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - bzip2
+    - cronie
+    - chrony
+#    - curl
+    - git
+    - htop
+    - jq
+    - less
+#    - libselinux-python
+    - lsof
+    - mailx
+#    - nc
+#    - ngrep
+#    - redhat-lsb-core
+    - rsync
+    - screen
+    - sysstat
+    - tcpdump
+    - tree
+    - unzip
+    - vim
+    - vim-common
+    - wget
+    - zsh
+  tags:
+    - packages
+    - redhat

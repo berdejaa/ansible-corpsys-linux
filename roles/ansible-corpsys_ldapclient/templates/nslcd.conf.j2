@@ -1,0 +1,20 @@
+{{ ansible_managed | comment }}
+
+# This is the configuration file for the LDAP nameservice
+# switch library's nslcd daemon. It configures the mapping
+# between NSS names (see /etc/nsswitch.conf) and LDAP
+# information in the directory.
+# See the manual page nslcd.conf(5) for more information.
+
+uid nslcd
+gid ldap
+ssl off
+uri ldap://{{ ldap_host }}
+base {{ ldap_base }}
+timelimit 120
+bind_timelimit 120
+idle_timelimit 120
+nss_initgroups_ignoreusers ALLLOCAL
+tls_cacertdir /etc/openldap/cacerts
+
+# This comment prevents repeated auto-migration of settings.

@@ -1,0 +1,9 @@
+---
+package_state: present
+default_full_sudo:
+  - zinc
+  - infra
+  - zabbix
+  - ec2-user
+  - '%infra-ssh-login'
+full_sudo: []

@@ -1,0 +1,26 @@
+---
+autofs_pkgs:
+  Linux: [ 'autofs' ]
+
+autofs_master:
+  Linux: "/etc/auto.master"
+
+# --- autofs config ---
+default_maps:
+  - name: users
+    mountpoint: /users
+    options: '--timeout=45'
+    comment: Home directories
+    mounts:
+      - name: '*'
+        options: '-fstype=nfs,rw'
+        location: "{{ location }}"
+autofs_maps: []
+# - name: isos
+#     mountpoint: /mnt
+#     options: "--timeout=30 --ghost"
+#     comment: "test"
+#     mounts:
+#       - name: isos
+#         options: "--fstype=nfs,rw,bg,hard,intr,tcp,resvport"
+#         location: "nfs.server.com:/data/isos"

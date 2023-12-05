@@ -1,0 +1,37 @@
+---
+- name: Install required packages.
+  yum:
+    name: pam
+    state: "{{ package_state }}"
+
+- name: /etc/pam.d/system-auth
+  copy:
+    src: system-auth-local
+    dest: /etc/pam.d/system-auth
+    owner: root
+    group: root
+    mode: 0644
+
+- name: /etc/pam.d/password-auth
+  copy:
+    src: system-auth-local
+    dest: /etc/pam.d/password-auth
+    owner: root
+    group: root
+    mode: 0644
+
+- name: /etc/pam.d/login
+  copy:
+    src: login
+    dest: /etc/pam.d/login
+    owner: root
+    group: root
+    mode: 0644
+
+- name: /etc/security/access.conf
+  template:
+    src: access.conf.j2
+    dest: /etc/security/access.conf
+    owner: root
+    group: root
+    mode: 0644

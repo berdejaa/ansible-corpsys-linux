@@ -1,0 +1,5 @@
+- name: ansible-corpsys_packages
+  become: true
+  hosts: all
+  roles:
+     - { role: ansible-corpsys_packages }

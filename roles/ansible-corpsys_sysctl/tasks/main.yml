@@ -1,0 +1,58 @@
+---
+# Role: system
+# Description: Setup system kernel parameters, security limits
+
+# Set sysctl entries
+- name: Set VM Swappiness to 0
+  sysctl:
+    name: vm.swappiness
+    value: 1
+    state: present
+    reload: yes
+  tags:
+    - system
+    - sysctl
+
+- name: Disable zone reclaim
+  sysctl:
+    name: vm.zone_reclaim_mode
+    value: 0
+    state: present
+    reload: yes
+  tags:
+    - system
+    - sysctl
+
+- name: Set TCP KeepAlive
+  sysctl:
+    name: net.ipv4.tcp_keepalive_time
+    value: 300
+    state: present
+    reload: yes
+  tags:
+    - system
+    - sysctl
+
+- name: Set ulimit values for performance
+  lineinfile:
+    dest: /etc/security/limits.d/90-performance.conf
+    insertafter: EOF
+    state: present
+    create: yes
+    line: "{{ item }}"
+    mode: 0644
+  with_items:
+    - "# <domain> <type> <item> <value>"
+    - "* hard fsize unlimited"
+    - "* soft fsize unlimited"
+    - "* hard cpu unlimited"
+    - "* soft cpu unlimited"
+    - "* hard as unlimited"
+    - "* soft as unlimited"
+    - "* soft nofile 64000"
+    - "* hard nofile 64000"
+    - "* soft nproc 64000"
+    - "* hard nproc 64000"
+  tags:
+    - system
+    - ulimit

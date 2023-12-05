@@ -1,0 +1,13 @@
+---
+- name: Local infrastructure group
+  group:
+    state: present
+    name: infra
+    gid: 1001
+
+- name: Infrastructure user for local administration
+  user:
+    name: infra
+    uid: 1001
+    group: infra
+    password: '$6$/VuUkv1Z.2aRnObW$SJNo5yu/xM3//6l0WakEbtrCWFOmYpOn9f6sM6fy8rVPftKic71NJadV1S24tDRWhQPJNQ9eK7hL0t4G13Xxx.'

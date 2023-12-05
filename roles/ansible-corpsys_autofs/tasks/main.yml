@@ -1,0 +1,42 @@
+---
+- name: Set defaults
+  set_fact:
+    bbenv: production
+  when: bbenv is not defined
+
+- name: Include domain-specific variables
+  include_vars: "{{ bbenv }}.yaml"
+
+- name: "Install autofs package"
+  yum:
+    state: present
+    name: "autofs"
+
+- name: "Create mount directory"
+  file:
+    path: "{{ item.mountpoint }}"
+    state: directory
+  with_items: "{{ default_maps + autofs_maps }}"
+
+- name: "Create mount configuration"
+  template:
+    src: mount_map.j2
+    dest: "/etc/auto.{{ item.name }}"
+    mode: 0644
+  with_items: "{{ default_maps + autofs_maps }}"
+  notify: [ 'restart autofs', 'reload autofs']
+
+- name: "Add mount to master config"
+  template:
+    src: master_map.j2
+    dest: "/etc/auto.master.d/{{ item.name }}.autofs"
+    mode: 0644
+  with_items: "{{ default_maps + autofs_maps }}"
+  notify: [ 'restart autofs', 'reload autofs']
+
+- name: "ensure autofs starts at boot"
+  service:
+    name: autofs
+    state: started
+    enabled: yes
+  when: ansible_system == 'Linux'

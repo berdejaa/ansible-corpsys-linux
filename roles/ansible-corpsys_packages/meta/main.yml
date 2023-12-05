@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Daniel Campos
+  description: Ansible role to install basic packages (https://github.com/bodybuildingcom/ansible-basic-packages)
+  company: "Bodybuilding.com"
+  license: MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: EL
+      versions:
+       - 6
+       - 7
+    - name: Amazon
+      versions:
+      - 2017.03
+      - 2017.09
+    - name: Debian
+      versions:
+      - squeeze
+      - wheezy
+  categories:
+    - development
+    - system
+  dependencies: []

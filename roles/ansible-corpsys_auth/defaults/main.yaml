@@ -1,0 +1,8 @@
+---
+access_groups:
+  - 'infra'
+  - 'infra-ssh-login'
+ldap_base: 'dc=body,dc=local'
+ldap_host: 'lovage.body.prod'
+dev_access: false
+full_sudo: []

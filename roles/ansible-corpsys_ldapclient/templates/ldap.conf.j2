@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+
+base {{ ldap_base }}
+host {{ ldap_host }}
+timelimit 120
+bind_timelimit 120
+idle_timelimit 120
+bind_policy soft
+nss_initgroups_ignoreusers root,centos,ldap,named,avahi,haldaemon,dbus,news,nscd,gdm
+ssl no
+tls_cacertdir /etc/openldap/cacerts

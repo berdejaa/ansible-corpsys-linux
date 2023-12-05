@@ -1,0 +1,76 @@
+#!/bin/sh
+sshdir='/etc/ssh/users'
+lovage='http://{{ ldap_host }}:983'
+
+if [ -d "$sshdir" ]; then
+    cd $sshdir
+else
+    echo "no directory for keys, bailing out"
+    exit 1
+fi
+
+# "rev" contains a git hash, or really any unique and updated string
+echo "Pulling rev file"
+curl -s -o rev "$lovage/rev"
+
+# -N in case we don't have a last revision
+diff -qN rev LASTREV
+
+# if we have an argument, assume we're run by hand and force an update
+if ! [ $? -eq 1 ] || ! [ $# -gt 0 ]; then
+
+    #this can be removed at some point, but it will remove the old CLAM way of storing keys
+    for DIR in `find /etc/ssh/users/ -name authorized_keys -exec dirname {} \;` ; do rm -rf $DIR; done
+    # save this revision for next time
+    mv rev LASTREV
+    curl -s -o dirlist "$lovage"
+
+    # scrape the public key names out of the HTML wad we just grabbed
+    # valid chars are alphanumeric and .-_@ (but @ is special)
+    # if gitolite has an "@" in the name, it's not going to match our users.  Ignore them.
+
+    egrep -o '[a-zA-Z0-9\.\_\@\-]+\.pub' dirlist | sort | uniq | grep -v "@" > filelist1
+    # download each key
+
+    cat filelist1 | xargs -n1 -I '{}' curl -s -o {} $lovage/{}
+    # Create a list of keys on the file system
+
+    ls -1 *.pub | sort | uniq | grep -v "@" > filesystemlist
+    echo "Created filesystemlist file"
+
+    if [ `wc -l filelist1 |awk '{print $1}'` -lt 20 ]; then
+       echo "Less than 20 keys found, not trusting keys, bailing out"
+       exit 1
+    else
+       ls -ld /tmp/cleanedsshkeys/ 2>&1 1>/dev/null || mkdir /tmp/cleanedsshkeys
+       diff -I atg.pub     \
+            -I bishop.pub   \
+            -I build.pub   \
+            -I bwbot.pub \
+            -I carbon.pub \
+            -I centos7-packer.pub \
+            -I configuser.pub \
+            -I content.pub \
+            -I dbot.pub    \
+            -I deploysa.pub \
+            -I dev.pub     \
+            -I endeca.pub  \
+            -I git.pub     \
+            -I gpdev.pub \
+            -I jenkins.pub \
+            -I lovage.ldap.pub \
+            -I mysqlha.pub \
+            -I oracle.pub \
+            -I root.pub    \
+            -I service.jenkins.pub \
+            -I vagrant.pub \
+            -I zinc.pub    \
+            filesystemlist filelist1 |grep "^<" | sed s/"< "//g  | xargs -n1 -I '{}' mv {} /tmp/cleanedsshkeys/{}
+
+    fi
+    # clean up
+    rm filelist1 dirlist filesystemlist
+
+else 
+echo "Something caused the script to bail"
+fi

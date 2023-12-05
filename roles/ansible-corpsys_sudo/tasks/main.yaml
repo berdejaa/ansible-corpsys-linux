@@ -1,0 +1,36 @@
+---
+- name: Install packages.
+  yum:
+    name: sudo
+    state: "{{ package_state }}"
+
+- name: /etc/sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: 0440
+
+#- name: Delete /etc/sudoers.d directory to purge unmanaged configs.
+#  file:
+#    dest: /etc/sudoers.d
+#    state: absent
+
+- name: /etc/sudoers.d
+  file:
+    path: /etc/sudoers.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Add sudoers.d configuration.
+  template:
+    src: full_sudo.j2
+    dest: /etc/sudoers.d/{{ item | replace('.','-') | regex_replace('^%(.*)$', 'group-\g<1>') }}
+    owner: root
+    group: root
+    mode: 0440
+  loop: "{{ default_full_sudo + full_sudo }}"
+  when: item is defined

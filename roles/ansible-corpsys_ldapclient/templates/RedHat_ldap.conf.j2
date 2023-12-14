@@ -1,11 +1,7 @@
 {{ ansible_managed | comment }}
 
 base {{ ldap_base }}
-{% if ansible_distribution_version == "22.04" %}
-uri = ldap://{{ ldap_host }}
-{% else %}
-host = {{ ldap_host }} 
-{% endif %}
+host {{ ldap_host }} 
 timelimit 120
 bind_timelimit 120
 idle_timelimit 120

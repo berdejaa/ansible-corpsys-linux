@@ -7,7 +7,7 @@
 # See the manual page nslcd.conf(5) for more information.
 
 uid nslcd
-gid ldap
+gid nslcd
 ssl off
 uri ldap://{{ ldap_host }}
 base {{ ldap_base }}
@@ -15,6 +15,6 @@ timelimit 120
 bind_timelimit 120
 idle_timelimit 120
 nss_initgroups_ignoreusers ALLLOCAL
-tls_cacertdir {{ ldap_cert }}
+tls_cacertdir /etc/ssl/certs
 
 # This comment prevents repeated auto-migration of settings.

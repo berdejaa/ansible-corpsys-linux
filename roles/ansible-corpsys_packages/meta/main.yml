@@ -18,6 +18,9 @@ galaxy_info:
       versions:
       - squeeze
       - wheezy
+    - name: Ubuntu
+      versions:
+      - 20.04
   categories:
     - development
     - system

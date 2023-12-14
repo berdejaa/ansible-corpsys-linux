@@ -2,7 +2,7 @@
 # Install base packages
 
 - name: Only run "update_cache=yes" if the last one is more than 7200 seconds ago
-  apt:
+  package:
     update_cache: yes
     cache_valid_time: 7200
   tags:
@@ -10,7 +10,7 @@
     - debian
 
 - name: Install base packages (Debian Based)
-  apt:
+  package:
     name: "{{ item }}"
     state: present
   with_items:
@@ -20,10 +20,15 @@
     - git
     - htop
     - jq
+    - ldap-utils
     - less
+    - libnss-ldapd
+    - libpam-ldapd
     - lsof
     - mailutils
     - netcat
+    - nscd
+    - nslcd
     - ngrep
     - rsync
     - screen

@@ -8,7 +8,7 @@
   include_vars: "{{ bbenv }}.yaml"
 
 - name: "Install autofs package"
-  yum:
+  package:
     state: present
     name: "autofs"
 

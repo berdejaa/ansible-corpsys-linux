@@ -1,6 +1,6 @@
 ---
 - name: Install packages.
-  yum:
+  package:
     name: sudo
     state: "{{ package_state }}"
 

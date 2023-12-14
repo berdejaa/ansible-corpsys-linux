@@ -1,8 +1,9 @@
 ---
 - name: Install required packages.
-  yum:
+  package:
     name: pam
     state: "{{ package_state }}"
+  when: ansible_distribution_version != "22.04"
 
 - name: /etc/pam.d/system-auth
   copy:

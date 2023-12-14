@@ -1,4 +1,5 @@
 ---
-package_state: present
-ldap_host: 'lovage.body.prod'
-ldap_base: 'dc=body,dc=local'
+  package_state: present
+  ldap_base: 'dc=body,dc=local'
+  ldap_cert: '/etc/openldap/cacerts'
+  ldap_host: 'lovage.body.prod'

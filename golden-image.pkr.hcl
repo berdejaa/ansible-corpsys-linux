@@ -18,17 +18,14 @@ data "amazon-ami" "amzn2023-corpsys" {
   most_recent = true
 }
 
-packer {
-  required_plugins {
-    amazon = {
-      source  = "github.com/hashicorp/amazon"
-      version = "~> 1"
-    }
-    ansible = {
-      source  = "github.com/hashicorp/ansible"
-      version = "~> 1"
-    }
+data "amazon-ami" "ubuntu2204-corpsys" {
+  filters = {
+    virtualization-type = "hvm"
+    name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+    root-device-type    = "ebs"
   }
+  owners      = ["099720109477"]
+  most_recent = true
 }
 
 source "amazon-ebs" "amzn2-corpsys" {
@@ -69,9 +66,42 @@ source "amazon-ebs" "amzn2023-corpsys" {
   }
 }
 
+source "amazon-ebs" "ubuntu2204-corpsys" {
+  vpc_id               = "vpc-2875b44d"
+  subnet_id            = "subnet-9107d8f4"
+  region               = "us-west-2"
+  ssh_username         = "ubuntu"
+  ssh_keypair_name     = "bbcom_general_key"
+  ssh_private_key_file = "/Users/arthur.berdeja/.ssh/bbcom_general.pem"
+  ami_name             = "ubuntu2204-corpsys-${uuidv4()}"
+  source_ami           = data.amazon-ami.ubuntu2204-corpsys.id
+  instance_type        = "t3.micro"
+  tags = {
+    OS_Version    = "Ubuntu Linux 22.04"
+    Name          = "Ubuntu Linux 22.04 Corpsys Base"
+    Release       = "Latest"
+    Base_AMI_Name = "{{ .SourceAMIName }}"
+    Extra         = "{{ .SourceAMITags.TagName }}"
+  }
+}
+
+packer {
+  required_plugins {
+    amazon = {
+      source  = "github.com/hashicorp/amazon"
+      version = "~> 1"
+    }
+    ansible = {
+      source  = "github.com/hashicorp/ansible"
+      version = "~> 1"
+    }
+  }
+}
+
 build {
   sources = [
     "source.amazon-ebs.amzn2-corpsys",
+    "source.amazon-ebs.ubuntu2204-corpsys",
     "source.amazon-ebs.amzn2023-corpsys"
   ]
 
@@ -79,6 +109,14 @@ build {
     execute_command = "sudo -S env {{ .Vars }} {{ .Path }}"
     inline = [
       "echo 'Defaults !requiretty' >>/etc/sudoers",
+    ]
+  }
+
+  provisioner "ansible" {
+    playbook_file = "./ansible-corpsys_os.yml"
+    extra_arguments = [
+      "--scp-extra-args",
+      "'-O'"
     ]
   }
 
@@ -143,6 +181,7 @@ build {
   provisioner "shell" {
     execute_command = "sudo -S env {{ .Vars }} {{ .Path }}"
     inline = [
+      "sed -i 's|#AuthorizedKeysFile|AuthorizedKeysFile|' /etc/ssh/sshd_config",
       "sed -i 's|.ssh/authorized_keys|/etc/ssh/users/%u.pub|' /etc/ssh/sshd_config",
       "echo 'match User ec2-user' >>/etc/ssh/sshd_config",
       "echo '    AuthorizedKeysFile .ssh/authorized_keys' >>/etc/ssh/sshd_config",

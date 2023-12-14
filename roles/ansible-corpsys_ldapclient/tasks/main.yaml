@@ -1,12 +1,13 @@
 ---
 - name: Install packages.
-  yum:
+  package:
     name: "{{ packages }}"  
     state: "{{ package_state }}"
   vars:
     packages:
       - openldap
       - nss-pam-ldapd
+  when: ansible_distribution_version != "22.04"
   
 - name: Symlink /etc/openldap/certs -> /etc/openldap/cacerts
   file:
@@ -16,15 +17,27 @@
     group: root
     state: link
     force: yes
+  when: ansible_distribution_version != "22.04"
 
 - name: /etc/nslcd.conf
   template:
-    src: nslcd.conf.j2
+    src: RedHat_nslcd.conf.j2
     dest: /etc/nslcd.conf
     owner: root
     group: root
     mode: 0644
     #notify: restart nslcd
+  when: ansible_distribution_version != "22.04"
+
+- name: /etc/nslcd.conf
+  template:
+    src: Debian_nslcd.conf.j2
+    dest: /etc/nslcd.conf
+    owner: root
+    group: root
+    mode: 0644
+    #notify: restart nslcd
+  when: ansible_distribution_version == "22.04"
 
 - name: Enable and start nslcd service.
   service:
@@ -34,11 +47,21 @@
 
 - name: /etc/openldap/ldap.conf
   template:
-    src: ldap.conf.j2
+    src: RedHat_ldap.conf.j2
     dest: /etc/openldap/ldap.conf
     owner: root
     group: root
     mode: 0444
+  when: ansible_distribution_version != "22.04"
+
+- name: /etc/openldap/ldap.conf
+  template:
+    src: Debian_ldap.conf.j2
+    dest: /etc/ldap.conf
+    owner: root
+    group: root
+    mode: 0444
+  when: ansible_distribution_version == "22.04"
 
 - name: Symlink /etc/ldap.conf -> /etc/openldap/ldap.conf
   file:
@@ -48,6 +71,7 @@
     group: root
     state: link
     force: yes
+  when: ansible_distribution_version != "22.04"
     
 - name: /etc/nsswitch.conf
   copy:

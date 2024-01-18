@@ -1,0 +1,12 @@
+---
+- name: Local infrastructure group
+  group:
+    state: present
+    name: zabbix
+    gid: 490
+
+- name: Infrastructure user for local administration
+  user:
+    name: zabbix
+    uid: 490
+    group: zabbix

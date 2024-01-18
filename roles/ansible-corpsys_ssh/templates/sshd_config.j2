@@ -48,7 +48,7 @@ PubkeyAuthentication {{ ssh_pubkey_authentication }}
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
-AuthorizedKeysFile {{ ssh_authkey_file }}
+AuthorizedKeysFile {{ ssh_authkey_file }} .ssh/authorized_keys
 
 #AuthorizedPrincipalsFile none
 

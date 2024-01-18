@@ -7,3 +7,6 @@
 
 - name: Create Zincster user
   import_tasks: user_zinc.yaml
+
+  - name: Create Zabbix user
+  import_tasks: user_zabbix.yaml
